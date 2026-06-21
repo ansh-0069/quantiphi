@@ -5,6 +5,7 @@ Run: python test_hardened.py
 import sys
 import requests
 import json
+from datetime import datetime
 sys.stdout.reconfigure(encoding='utf-8')
 
 BASE = "http://localhost:3001/api"
@@ -72,6 +73,27 @@ if r.status_code == 201:
     check("  Fallback protein  = 3 per 100g",   meal["protein"]  == 3.0,   meal)
     check("  Fallback carbs    = 20 per 100g",  meal["carbs"]    == 20.0,  meal)
     check("  Fallback fats     = 2 per 100g",   meal["fats"]     == 2.0,   meal)
+clear_meals()
+
+# 5b. Custom food creation → searchable immediately and usable for logging
+r = requests.post(
+    f"{BASE}/foods",
+    json={
+        "name": "Vibe Bowl",
+        "caloriesPer100g": 210,
+        "proteinPer100g": 11,
+        "carbsPer100g": 19,
+        "fatsPer100g": 9,
+    },
+)
+check("Custom food creation → 201", r.status_code == 201, r.json() if r.status_code != 201 else None)
+if r.status_code == 201:
+    created = r.json()["food"]
+    check("  Custom food id generated", created["id"] == "vibe_bowl", created)
+    search = requests.get(f"{BASE}/foods", params={"search": "Vibe"})
+    check("  Custom food searchable immediately", any(item["id"] == "vibe_bowl" for item in search.json()), search.json())
+    meal = post_meal({"foodName": "Vibe Bowl", "portionGrams": 100}).json()["newMeal"]
+    check("  Custom food logs with exact calories", meal["calories"] == 210.0, meal)
 clear_meals()
 
 # 6. Zero grams
@@ -280,6 +302,22 @@ def is_1dp(v):
     return isinstance(v, (int, float)) and round(v, 1) == v
 check("All meal values are 1dp",
       all(is_1dp(meal[k]) for k in ["calories", "protein", "carbs", "fats"]))
+clear_meals()
+
+print("\n" + "="*60)
+print("  WEEKLY HISTORY SNAPSHOT")
+print("="*60)
+
+clear_meals()
+post_meal({"foodName": "Apple", "portionGrams": 100})
+dashboard = requests.get(f"{BASE}/meals").json()
+history = requests.get(f"{BASE}/history/week").json()["history"]
+today = datetime.now().strftime("%Y-%m-%d")
+today_entry = next((item for item in history if item["date"] == today), None)
+check("History endpoint → 7 entries", len(history) == 7, history)
+check("History endpoint → today's date present", today_entry is not None, history)
+if today_entry is not None:
+    check("History endpoint → today's calories match dashboard", today_entry["calories"] == dashboard["consumed"]["calories"], today_entry)
 clear_meals()
 
 print("\n" + "="*60)
