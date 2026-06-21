@@ -1,0 +1,105 @@
+/* =====================================================
+   MealHistoryList — logged meals table
+   ===================================================== */
+.meal-history {
+  background: var(--surface-2);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.meal-history__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
+.meal-history__empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 2.5rem 0;
+  opacity: 0.6;
+}
+
+.meal-history__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.meal-history__table thead tr {
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.meal-history__table th {
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 0.8rem 0.7rem;
+}
+
+.meal-history__table th:first-child { padding-left: 0; }
+.meal-history__table th:last-child  { text-align: center; padding-right: 0; }
+
+.meal-row {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.15s ease;
+}
+
+.meal-row:last-child { border-bottom: none; }
+.meal-row:hover { background: rgba(255,255,255,0.03); }
+
+.meal-row td {
+  padding: 0.75rem 0.8rem;
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.meal-row td:first-child { padding-left: 0; }
+.meal-row td:last-child  { text-align: center; padding-right: 0; }
+
+.meal-row__name {
+  font-weight: 600;
+}
+
+.meal-row__portion {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  display: block;
+  margin-top: 1px;
+}
+
+.meal-row__num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.meal-row__num--calories { color: #63b3ed; }
+.meal-row__num--protein  { color: #818cf8; }
+.meal-row__num--carbs    { color: #fbbf24; }
+.meal-row__num--fats     { color: #f472b6; }
+
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 6px;
+  border-radius: 8px;
+  transition: color 0.15s ease, background 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete:hover {
+  color: #f87171;
+  background: rgba(220,38,38,0.12);
+}

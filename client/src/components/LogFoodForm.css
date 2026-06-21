@@ -1,0 +1,115 @@
+/* =====================================================
+   LogFoodForm — input card
+   ===================================================== */
+.log-form {
+  background: var(--surface-2);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.log-form__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
+.log-form__row {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.log-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+  min-width: 140px;
+}
+
+.log-form__field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.log-form__input {
+  background: var(--surface-3);
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  padding: 0.65rem 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+  width: 100%;
+}
+
+.log-form__input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 3px rgba(99,179,237,0.15);
+}
+
+.log-form__input::placeholder { color: rgba(255,255,255,0.2); }
+
+.log-form__actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-end;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  padding: 0.68rem 1.4rem;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(0); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn--primary {
+  background: var(--accent-gradient);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(99,179,237,0.3);
+}
+.btn--primary:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(99,179,237,0.45);
+}
+
+.btn--scan {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-muted);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.btn--scan:hover:not(:disabled) {
+  background: rgba(255,255,255,0.1);
+  color: var(--text-primary);
+}
+
+.log-form__error {
+  margin-top: 0.7rem;
+  padding: 0.5rem 0.9rem;
+  background: rgba(220,38,38,0.12);
+  border: 1px solid rgba(220,38,38,0.3);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 0.82rem;
+}

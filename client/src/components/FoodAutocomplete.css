@@ -1,0 +1,85 @@
+/* =====================================================
+   FoodAutocomplete — dropdown suggestion list
+   ===================================================== */
+
+.autocomplete {
+  position: relative;
+  flex: 1;
+}
+
+/* The dropdown panel */
+.autocomplete__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 200;
+
+  background: #1e2a3a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  overflow: hidden;
+
+  /* Slide-down entrance */
+  animation: dropdownOpen 0.15s ease;
+}
+
+@keyframes dropdownOpen {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Individual suggestion item */
+.autocomplete__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  transition: background 0.1s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.autocomplete__item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete__item:hover,
+.autocomplete__item--active {
+  background: rgba(99,179,237,0.1);
+}
+
+/* Food name with the matched portion highlighted */
+.autocomplete__name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.autocomplete__name mark {
+  background: none;
+  color: var(--accent-blue);
+  font-weight: 800;
+}
+
+/* Calorie hint on the right */
+.autocomplete__cal {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* "No results" state */
+.autocomplete__empty {
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

@@ -1,0 +1,99 @@
+/* =====================================================
+   MacroMeters — 3 horizontal macro bars
+   ===================================================== */
+.macro-meters {
+  background: var(--surface-2);
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+}
+
+.macro-meters__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
+.macro-meters__grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.macro-item__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.45rem;
+}
+
+.macro-item__name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.macro-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.macro-item__warning {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fb923c; /* orange-400 */
+  background: rgba(251, 146, 60, 0.1);
+  border: 1px solid rgba(251, 146, 60, 0.25);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  margin-left: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  text-transform: none;
+  letter-spacing: normal;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.macro-item__values {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.macro-item__values strong {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.macro-item__track {
+  height: 10px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.macro-item__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Per-macro colors */
+.macro-item__fill--protein { background: linear-gradient(90deg, #6366f1, #818cf8); }
+.macro-item__fill--carbs   { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.macro-item__fill--fats    { background: linear-gradient(90deg, #ec4899, #f472b6); }
+
+.macro-item__dot--protein { background: #818cf8; }
+.macro-item__dot--carbs   { background: #fbbf24; }
+.macro-item__dot--fats    { background: #f472b6; }

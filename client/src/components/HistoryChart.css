@@ -1,0 +1,11 @@
+.history-chart{
+  margin: 1rem 0;
+  background: var(--panel-bg, #fff);
+  padding: 0.6rem;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.03);
+  max-width: 380px;
+}
+.history-chart__title{ font-weight:600; margin-bottom:0.4rem; font-size:0.95rem }
+.history-chart__loading, .history-chart__error{ padding:0.5rem; color:#666 }
+.history-chart__bar{ fill: #6ab04c; rx:3; }

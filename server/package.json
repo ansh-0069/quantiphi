@@ -1,0 +1,15 @@
+{
+  "name": "calorie-tracker-server",
+  "version": "1.0.0",
+  "description": "Calorie Tracker & Macro Dashboard - Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "uuid": "^10.0.0"
+  }
+}
