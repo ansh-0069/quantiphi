@@ -164,7 +164,7 @@ export default function LogFoodForm({ onLog, onScan, loading }) {
               disabled={loading}
               title="Simulate AI food photo scanner — auto-fills Grilled Salmon 150g"
             >
-              📷 Scan
+              📷 Image Upload
             </button>
           </div>
         </div>
