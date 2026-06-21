@@ -8,8 +8,11 @@
     "dev": "node --watch index.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.21.0",
+    "multer": "^2.2.0",
     "uuid": "^10.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { getMeals, postMeal, softDeleteMeal, confirmDelete, restoreMeal, setGoal } from './api/api'
+import { getMeals, postMeal, softDeleteMeal, confirmDelete, restoreMeal, setGoal, uploadAndScanMeal } from './api/api'
 
 import GoalToggle       from './components/GoalToggle'
 import CalorieBudgetBar from './components/CalorieBudgetBar'
@@ -83,13 +83,13 @@ export default function App() {
     }
   }
 
-  const handleScan = async () => {
+  const handleScan = async (file) => {
     setLoading(true)
     setError('')
     try {
-      applyDashboard(await postMeal({ scanned: true }))
+      applyDashboard(await uploadAndScanMeal(file))
     } catch {
-      setError('Failed to scan food. Check your connection.')
+      setError('Failed to scan food. Check your connection or API key.')
     } finally {
       setLoading(false)
     }

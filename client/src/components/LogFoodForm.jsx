@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import FoodAutocomplete from './FoodAutocomplete'
 import { addFood } from '../api/api'
 import './LogFoodForm.css'
@@ -10,11 +10,12 @@ import './LogFoodForm.css'
  * Props:
  *   onLog(foodName, portionGrams) → Promise<boolean>
  *     Returns true on success (clears fields), false on error (keeps fields).
- *   onScan() → void
- *     Triggers the mock AI food scanner.
+ *   onScan(file) → void
+ *     Triggers the actual/mock AI food scanner.
  *   loading: boolean — disables all inputs while a request is in flight.
  */
 export default function LogFoodForm({ onLog, onScan, loading }) {
+  const fileInputRef = useRef(null)
   const [foodName,     setFoodName]     = useState('')
   const [portionGrams, setPortionGrams] = useState('')
   const [error,        setError]        = useState('')
@@ -63,9 +64,12 @@ export default function LogFoodForm({ onLog, onScan, loading }) {
     }
   }
 
-  const handleScan = () => {
+  const handleScan = (e) => {
     setError('')
-    onScan()
+    const file = e.target.files?.[0]
+    if (file) {
+      onScan(file)
+    }
   }
 
   const handleAddFoodSubmit = async (e) => {
@@ -160,12 +164,21 @@ export default function LogFoodForm({ onLog, onScan, loading }) {
               type="button"
               id="btn-scan-food"
               className="btn btn--scan"
-              onClick={handleScan}
+              onClick={() => fileInputRef.current?.click()}
               disabled={loading}
-              title="Simulate AI food photo scanner — auto-fills Grilled Salmon 150g"
+              title="Upload food photo to identify and log nutrition using AI"
             >
               📷 Image Upload
             </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              accept="image/*"
+              capture="environment"
+              onChange={handleScan}
+              disabled={loading}
+            />
           </div>
         </div>
 

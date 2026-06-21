@@ -6,7 +6,12 @@
  *   actual = (portionGrams / 100) × valuePer100g
  */
 
-const FOOD_DATABASE = [
+const fs = require("fs");
+const path = require("path");
+
+const CUSTOM_FOODS_FILE = path.join(__dirname, "customFoods.json");
+
+const BASE_FOOD_DATABASE = [
   { id: "chicken_breast",  name: "Chicken Breast",       caloriesPer100g: 165, proteinPer100g: 31.0, carbsPer100g:  0.0, fatsPer100g:  3.6 },
   { id: "brown_rice",      name: "Brown Rice",            caloriesPer100g: 112, proteinPer100g:  2.3, carbsPer100g: 24.0, fatsPer100g:  0.8 },
   { id: "broccoli",        name: "Broccoli",              caloriesPer100g:  34, proteinPer100g:  2.8, carbsPer100g:  7.0, fatsPer100g:  0.4 },
@@ -29,6 +34,41 @@ const FOOD_DATABASE = [
   { id: "chapati",         name: "Chapati",               caloriesPer100g: 297, proteinPer100g:  9.0, carbsPer100g: 50.0, fatsPer100g:  7.5 },
   { id: "dal",             name: "Dal (Cooked Lentils)",  caloriesPer100g: 116, proteinPer100g:  9.0, carbsPer100g: 20.0, fatsPer100g:  0.4 },
 ];
+
+const FOOD_DATABASE = [...BASE_FOOD_DATABASE];
+const CUSTOM_FOODS = [];
+
+function loadCustomFoods() {
+  if (!fs.existsSync(CUSTOM_FOODS_FILE)) {
+    return;
+  }
+
+  try {
+    const raw = fs.readFileSync(CUSTOM_FOODS_FILE, "utf8");
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      for (const food of parsed) {
+        if (food && typeof food === "object" && food.id && food.name) {
+          CUSTOM_FOODS.push(food);
+          FOOD_DATABASE.unshift(food);
+        }
+      }
+    }
+  } catch (err) {
+    // Ignore malformed persistence files and fall back to the built-in DB.
+    console.error("Failed to load custom foods:", err?.message ?? err);
+  }
+}
+
+function persistCustomFoods() {
+  try {
+    fs.writeFileSync(CUSTOM_FOODS_FILE, JSON.stringify(CUSTOM_FOODS, null, 2), "utf8");
+  } catch (err) {
+    console.error("Failed to persist custom foods:", err?.message ?? err);
+  }
+}
+
+loadCustomFoods();
 
 function slugifyFoodName(name) {
   return name
@@ -101,6 +141,8 @@ function addFood(food) {
   };
 
   FOOD_DATABASE.unshift(nextFood);
+  CUSTOM_FOODS.unshift(nextFood);
+  persistCustomFoods();
   return nextFood;
 }
 

@@ -6,6 +6,15 @@ export const getMeals       = ()     => api.get('/meals').then(r => r.data)
 export const postMeal       = (body) => api.post('/meals', body).then(r => r.data)
 export const getFoods       = (q='') => api.get(`/foods${q ? `?q=${q}` : ''}`).then(r => r.data)
 export const addFood        = (body) => api.post('/foods', body).then(r => r.data)
+export const uploadAndScanMeal = (file) => {
+  const formData = new FormData()
+  formData.append('image', file)
+  return api.post('/meals/scan', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }).then(r => r.data)
+}
 
 // Undo-aware delete flow:
 //   softDeleteMeal  → marks pendingDeletion=true, bars update instantly
