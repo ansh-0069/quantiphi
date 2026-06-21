@@ -30,6 +30,14 @@ const FOOD_DATABASE = [
   { id: "dal",             name: "Dal (Cooked Lentils)",  caloriesPer100g: 116, proteinPer100g:  9.0, carbsPer100g: 20.0, fatsPer100g:  0.4 },
 ];
 
+function slugifyFoodName(name) {
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "") || "custom_food";
+}
+
 /**
  * Generic fallback nutrient profile for unknown foods.
  * Used when a food name is not found in the database.
@@ -69,4 +77,31 @@ function getAllFoods() {
   }));
 }
 
-module.exports = { FOOD_DATABASE, FALLBACK_NUTRIENTS, MOCK_SCANNED_FOOD, findFood, getAllFoods };
+function addFood(food) {
+  const name = String(food.name || "").trim();
+  if (!name) {
+    throw new Error("Food name is required.");
+  }
+
+  const baseId = slugifyFoodName(name);
+  let id = baseId;
+  let suffix = 2;
+  while (FOOD_DATABASE.some((item) => item.id === id)) {
+    id = `${baseId}_${suffix}`;
+    suffix += 1;
+  }
+
+  const nextFood = {
+    id,
+    name,
+    caloriesPer100g: Number(food.caloriesPer100g),
+    proteinPer100g: Number(food.proteinPer100g),
+    carbsPer100g: Number(food.carbsPer100g),
+    fatsPer100g: Number(food.fatsPer100g),
+  };
+
+  FOOD_DATABASE.unshift(nextFood);
+  return nextFood;
+}
+
+module.exports = { FOOD_DATABASE, FALLBACK_NUTRIENTS, MOCK_SCANNED_FOOD, findFood, getAllFoods, addFood };

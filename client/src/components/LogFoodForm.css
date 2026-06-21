@@ -113,3 +113,70 @@
   color: #f87171;
   font-size: 0.82rem;
 }
+
+.log-form__link-btn {
+  margin-top: 1rem;
+  background: transparent;
+  border: 0;
+  color: var(--accent-blue);
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
+.log-form__link-btn:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.log-form__custom-food {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.log-form__custom-food-title {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.log-form__custom-food-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.log-form__custom-food-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.log-form__custom-food-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.log-form__custom-food-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .log-form__custom-food-grid {
+    grid-template-columns: 1fr;
+  }
+}

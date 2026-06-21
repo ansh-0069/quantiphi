@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FoodAutocomplete from './FoodAutocomplete'
+import { addFood } from '../api/api'
 import './LogFoodForm.css'
 
 /**
@@ -17,6 +18,11 @@ export default function LogFoodForm({ onLog, onScan, loading }) {
   const [foodName,     setFoodName]     = useState('')
   const [portionGrams, setPortionGrams] = useState('')
   const [error,        setError]        = useState('')
+  const [showAddFood,  setShowAddFood]  = useState(false)
+  const [addError,     setAddError]     = useState('')
+  const [addForm,      setAddForm]      = useState({
+    name: '', caloriesPer100g: '', proteinPer100g: '', carbsPer100g: '', fatsPer100g: '',
+  })
 
   // Called when user selects a suggestion from the autocomplete dropdown.
   // Fills the food name; focuses the portion input so the user can type grams next.
@@ -60,6 +66,44 @@ export default function LogFoodForm({ onLog, onScan, loading }) {
   const handleScan = () => {
     setError('')
     onScan()
+  }
+
+  const handleAddFoodSubmit = async (e) => {
+    e.preventDefault()
+    setAddError('')
+
+    const payload = {
+      name: addForm.name.trim(),
+      caloriesPer100g: parseFloat(addForm.caloriesPer100g),
+      proteinPer100g: parseFloat(addForm.proteinPer100g),
+      carbsPer100g: parseFloat(addForm.carbsPer100g),
+      fatsPer100g: parseFloat(addForm.fatsPer100g),
+    }
+
+    if (!payload.name) {
+      setAddError('Please enter a food name.')
+      return
+    }
+
+    for (const [key, value] of Object.entries(payload)) {
+      if (key === 'name') continue
+      if (Number.isNaN(value) || !Number.isFinite(value) || value < 0) {
+        setAddError('Please enter valid non-negative numbers for all nutrients.')
+        return
+      }
+    }
+
+    try {
+      const response = await addFood(payload)
+      const created = response.food ?? response
+      setFoodName(created.name)
+      setShowAddFood(false)
+      setAddForm({
+        name: '', caloriesPer100g: '', proteinPer100g: '', carbsPer100g: '', fatsPer100g: '',
+      })
+    } catch (err) {
+      setAddError(err?.response?.data?.error ?? 'Failed to add food.')
+    }
   }
 
   return (
@@ -124,6 +168,95 @@ export default function LogFoodForm({ onLog, onScan, loading }) {
             </button>
           </div>
         </div>
+
+        <button
+          type="button"
+          className="log-form__link-btn"
+          onClick={() => setShowAddFood((value) => !value)}
+          disabled={loading}
+        >
+          {showAddFood ? 'Hide custom food form' : "Can't find your food? Add it"}
+        </button>
+
+        {showAddFood && (
+          <div className="log-form__custom-food">
+            <span className="log-form__custom-food-title">Add a custom food</span>
+            <div className="log-form__custom-food-form">
+              <div className="log-form__custom-food-grid">
+                <label>
+                  Name
+                  <input
+                    type="text"
+                    className="log-form__input"
+                    value={addForm.name}
+                    onChange={(e) => setAddForm((prev) => ({ ...prev, name: e.target.value }))}
+                    placeholder="e.g. Homemade Curry"
+                    disabled={loading}
+                  />
+                </label>
+                <label>
+                  Calories / 100g
+                  <input
+                    type="number"
+                    className="log-form__input"
+                    value={addForm.caloriesPer100g}
+                    onChange={(e) => setAddForm((prev) => ({ ...prev, caloriesPer100g: e.target.value }))}
+                    min="0"
+                    step="any"
+                    disabled={loading}
+                  />
+                </label>
+                <label>
+                  Protein / 100g
+                  <input
+                    type="number"
+                    className="log-form__input"
+                    value={addForm.proteinPer100g}
+                    onChange={(e) => setAddForm((prev) => ({ ...prev, proteinPer100g: e.target.value }))}
+                    min="0"
+                    step="any"
+                    disabled={loading}
+                  />
+                </label>
+                <label>
+                  Carbs / 100g
+                  <input
+                    type="number"
+                    className="log-form__input"
+                    value={addForm.carbsPer100g}
+                    onChange={(e) => setAddForm((prev) => ({ ...prev, carbsPer100g: e.target.value }))}
+                    min="0"
+                    step="any"
+                    disabled={loading}
+                  />
+                </label>
+                <label>
+                  Fats / 100g
+                  <input
+                    type="number"
+                    className="log-form__input"
+                    value={addForm.fatsPer100g}
+                    onChange={(e) => setAddForm((prev) => ({ ...prev, fatsPer100g: e.target.value }))}
+                    min="0"
+                    step="any"
+                    disabled={loading}
+                  />
+                </label>
+              </div>
+
+              <div className="log-form__custom-food-actions">
+                <button type="button" onClick={handleAddFoodSubmit} className="btn btn--primary" disabled={loading}>
+                  Save food
+                </button>
+              </div>
+            </div>
+            {addError && (
+              <div className="log-form__error" role="alert">
+                {addError}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Validation / API error */}
         {error && (

@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllFoods } = require("../data/foodDatabase");
+const { getAllFoods, addFood } = require("../data/foodDatabase");
 
 const router = express.Router();
 
@@ -45,6 +45,36 @@ router.get("/", (req, res) => {
   } catch (err) {
     // Shouldn't happen with a static array, but be safe
     res.status(500).json({ error: "Failed to fetch food database." });
+  }
+});
+
+/**
+ * POST /api/foods
+ * Add a custom food to the in-memory database.
+ */
+router.post("/", (req, res) => {
+  try {
+    const { name, caloriesPer100g, proteinPer100g, carbsPer100g, fatsPer100g } = req.body || {};
+    const trimmedName = typeof name === "string" ? name.trim() : "";
+
+    if (!trimmedName) {
+      return res.status(400).json({ error: "name is required." });
+    }
+
+    const numericFields = { caloriesPer100g, proteinPer100g, carbsPer100g, fatsPer100g };
+    for (const [field, value] of Object.entries(numericFields)) {
+      if (value === undefined || value === null || value === "") {
+        return res.status(400).json({ error: `${field} is required.` });
+      }
+      if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+        return res.status(400).json({ error: `${field} must be a non-negative finite number.` });
+      }
+    }
+
+    const created = addFood({ name: trimmedName, caloriesPer100g, proteinPer100g, carbsPer100g, fatsPer100g });
+    res.status(201).json({ food: created });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to add food." });
   }
 });
 
